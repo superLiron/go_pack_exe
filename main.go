@@ -83,7 +83,7 @@ func main() {
 	fmt.Println("🚀 企业微信代理服务启动成功！")
 	fmt.Println("监听页面: http://localhost:8081")
 	fmt.Println("请保持此窗口打开...")
-	err := http.ListenAndServe("127.0.0.1:8081", nil)
+	err := http.ListenAndServe("0.0.0.0:8081", nil)
 	if err != nil {
 		fmt.Printf("❌ 启动失败: %v\n", err)
 	}
