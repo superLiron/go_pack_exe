@@ -30,7 +30,7 @@ func sendHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 记录请求时间
-	start := time.Now()
+	// start := time.Now()
 	fmt.Printf("📥 接收请求: %s\n", r.URL.Path)
 
 	body, err := ioutil.ReadAll(r.Body)
