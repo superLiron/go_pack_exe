@@ -70,8 +70,8 @@ func sendHandler(w http.ResponseWriter, r *http.Request) {
 	
 
 	fmt.Printf("消息构造:%s\n", weChatMsg) 
-	fmt.Printf("2消息构造:%v\n", strings.NewReader(string(newBody)))
-	resp, err := http.Post(req.Webhook, "application/json", strings.NewReader(string(newBody)))
+	fmt.Printf("2消息构造:%v\n", strings.NewReader(string(weChatMsg)))
+	resp, err := http.Post(req.Webhook, "application/json", strings.NewReader(string(weChatMsg)))
 	// resp, err := http.Post(req.Webhook, "application/json", strings.NewReader(string(body)))
 	fmt.Printf("4将要进入请求:%v\n", err)
 	if err != nil {
