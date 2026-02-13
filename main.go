@@ -42,19 +42,37 @@ func sendHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if req.Webhook == "" || req.Msg == "" {
-		http.Error(w, "Missing webhook or msg", http.StatusBadRequest)
-		fmt.Printf("缺少参数:")
+		http.Error(w, "缺少地址或者内容", http.StatusBadRequest)
 		return
 	}
-	fmt.Printf("将要进入请求:")
+
+
 	if !strings.HasPrefix(req.Webhook, "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=") {
 		http.Error(w, "Invalid webhook URL", http.StatusBadRequest)
+		fmt.Println("非法地址")
 		return
 	}
-	fmt.Printf("1将要进入请求:http.Post(req.Webhook,")
-	fmt.Printf("2将要进入请求:%v\n", req.Webhook)
-	fmt.Printf("3将要进入请求:%v\n", strings.NewReader(string(body)))
-	resp, err := http.Post(req.Webhook, "application/json", strings.NewReader(string(body)))
+
+	// ✅ 关键修改：自己构造企业微信需要的 JSON
+	buildMsg := map[string]interface{}{
+		"msgtype": "text",
+		"text": map[string]string{
+			"content": req.Msg,
+		},
+	}
+
+	weChatMsg, err := json.Marshal(buildMsg)
+	if err != nil {
+		http.Error(w, "Build message failed", http.StatusInternalServerError)
+		fmt.Printf("❌ 消息构造失败: %v\n", err)
+		return
+	}
+	
+
+	fmt.Printf("消息构造:%s\n", weChatMsg) 
+	fmt.Printf("2消息构造:%v\n", strings.NewReader(string(newBody)))
+	resp, err := http.Post(req.Webhook, "application/json", strings.NewReader(string(newBody)))
+	// resp, err := http.Post(req.Webhook, "application/json", strings.NewReader(string(body)))
 	fmt.Printf("4将要进入请求:%v\n", err)
 	if err != nil {
 		http.Error(w, "Forward failed: "+err.Error(), http.StatusInternalServerError)
