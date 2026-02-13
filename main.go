@@ -14,7 +14,6 @@ type RequestBody struct {
 }
 
 func sendHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("进入sendHandler:")
 	if r.Method != "POST" && r.Method != "OPTIONS" {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -39,7 +38,6 @@ func sendHandler(w http.ResponseWriter, r *http.Request) {
 	var req RequestBody
 	if err := json.Unmarshal(body, &req); err != nil {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
-		fmt.Printf("JSOn问题:")
 		return
 	}
 
@@ -53,8 +51,11 @@ func sendHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid webhook URL", http.StatusBadRequest)
 		return
 	}
-
+	fmt.Printf("1将要进入请求:http.Post(req.Webhook,")
+	fmt.Printf("2将要进入请求:%v\n", req.Webhook)
+	fmt.Printf("3将要进入请求:%v\n", strings.NewReader(string(body)))
 	resp, err := http.Post(req.Webhook, "application/json", strings.NewReader(string(body)))
+	fmt.Printf("4将要进入请求:%v\n", err)
 	if err != nil {
 		http.Error(w, "Forward failed: "+err.Error(), http.StatusInternalServerError)
 		fmt.Printf("❌ 转发失败: %v\n", err)
