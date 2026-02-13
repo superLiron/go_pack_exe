@@ -57,7 +57,7 @@ func sendHandler(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Post(req.Webhook, "application/json", strings.NewReader(string(body)))
 	if err != nil {
 		http.Error(w, "Forward failed: "+err.Error(), http.StatusInternalServerError)
-		fmt.Printf("转发失败"+err)
+		fmt.Printf("❌ 转发失败: %v\n", err)
 		return
 	}
 	defer resp.Body.Close()
